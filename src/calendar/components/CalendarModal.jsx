@@ -26,7 +26,7 @@ Modal.setAppElement('#root');
 
 export const CalendarModal = () => {
 
-  const {activeEvent, startSavingEvent}= useCalendarStore()
+  const {activeEvent, startSavingEvent, startDeleteEvent}= useCalendarStore()
 
   const {isDateModalOpen,closeDateModal}= useUiStore()
   const [startDate, setStartDate] = useState(new Date());
@@ -113,7 +113,27 @@ export const CalendarModal = () => {
       setFormSubmited(false)
     }
 
+    const deleteNote = () => {
+      
+      Swal.fire({
+        title:"Estas Seguro?",
+        text:"no podras revertir esta accion",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: "si, borrar"
+      }).then((result) => {
+        console.log("probando");
+        if(result.isConfirmed){
+          startDeleteEvent(activeEvent)
+          closeDateModal()
+         }
+      })
+      
+
     
+    }
 
 
   return (
@@ -194,6 +214,7 @@ export const CalendarModal = () => {
         <small id="emailHelp" className="form-text text-muted">Información adicional</small>
     </div>
 
+        <div className="d-grid gap-2 d-md-flex justify-content-md-between">
     <button
         type="submit"
         className="btn btn-outline-primary btn-block"
@@ -202,6 +223,15 @@ export const CalendarModal = () => {
         <span> Guardar</span>
     </button>
 
+        <button
+          type="submit"
+          className="btn btn-outline-danger btn-block"
+          onClick={deleteNote}
+        >
+          <i className="far fa-x"></i>
+          <span> Borrar</span>
+        </button>
+    </div>
 </form>
     </Modal>
   )
